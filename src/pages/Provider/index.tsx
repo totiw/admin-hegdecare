@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Topbar from "../../components/Topbar";
+import AddProvider from "../../assets/icons/AddProvider";
+import Table from "./Table";
+
+// REACT TABLE COMPONENT
+
 const index = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [sidebar, setSidebar] = useState<boolean>(false);
@@ -31,10 +36,23 @@ const index = () => {
       <Sidebar sidebar={sidebar} setSidebar={setSidebar} windowWidth={windowWidth} />
 
       {/* HOME */}
-      <div className="flex flex-col grow">
+      <div className="w-[80vw] flex flex-col grow">
         <Topbar setSidebar={setSidebar} />
-        <main className="w-full h-full flex flex-row justify-center items-center">
-          <h1 className="font-bold text-xl">Providers</h1>
+        <main className="w-full max-h-[90vh] overflow-auto flex flex-col gap-6 px-20 py-10">
+          <h1 className="font-bold text-3xl">Providers</h1>
+          <div className="w-full flex flex-row justify-between">
+            <input
+              type="text"
+              name="provider"
+              id="provider"
+              placeholder="search provider.."
+              className="border basis-1/2 xl:basis-1/4 px-3"
+            />
+            <button className="bg-[#4942E4] flex flex-row items-center gap-2 px-4 py-3 rounded-md text-white text-sm font-bold">
+              <AddProvider color="#ffffff" height=".9em" /> Add Provider
+            </button>
+          </div>
+          <Table />
         </main>
       </div>
     </div>
