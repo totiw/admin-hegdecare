@@ -5,11 +5,9 @@ import House from "../assets/icons/House";
 import Providers from "../assets/icons/Providers";
 import AddProvider from "../assets/icons/AddProvider";
 const Sidebar = ({
-  windowWidth,
   sidebar,
   setSidebar,
 }: {
-  windowWidth: number;
   sidebar: boolean;
   setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {

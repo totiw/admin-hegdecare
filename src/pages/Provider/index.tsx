@@ -33,7 +33,7 @@ const index = () => {
   return (
     <div className="w-full h-screen flex flex-row">
       {/* SIDEBAR */}
-      <Sidebar sidebar={sidebar} setSidebar={setSidebar} windowWidth={windowWidth} />
+      <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
 
       {/* HOME */}
       <div className="w-[80vw] flex flex-col grow">
