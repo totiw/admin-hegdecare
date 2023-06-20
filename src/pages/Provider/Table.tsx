@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import DataTable, { TableColumn } from "react-data-table-component";
 import Loader from "../../components/Loader";
+import EditPen from "../../assets/icons/EditPen";
+import Delete from "../../assets/icons/Delete";
 import axios from "../../api/axios";
 
 // SETTING DATA TYPE
 interface DataRow {
+  id: number;
+  user: any;
   thumbnail: string;
-  // user: any[];
   price: string;
   about: string;
   address: string;
@@ -34,65 +38,118 @@ const customSort = (rows: any, selector: any, direction: any) => {
   });
 };
 
-// SETTING TABLE COLUMN
-const columns: TableColumn<DataRow>[] = [
-  {
-    name: "Image",
-    cell: (row) => <img src={row.thumbnail} alt="profile picture" className="w-10 rounded-full" />,
-  },
-  {
-    name: "Price",
-    sortable: true,
-    selector: (row) => row.price,
-  },
-  {
-    name: "About",
-    sortable: true,
-    selector: (row) => row.about,
-  },
-  {
-    name: "Address",
-    sortable: true,
-    selector: (row) => row.address,
-  },
-  {
-    name: "Latitude",
-    sortable: true,
-    selector: (row) => row.latitude,
-  },
-  {
-    name: "Longitude",
-    sortable: true,
-    selector: (row) => row.longitude,
-  },
-  {
-    name: "Category",
-    sortable: true,
-    selector: (row) => row.category,
-  },
-];
+function Table({ data, pending, query }: { data: any; pending: boolean; query: string }): JSX.Element {
+  const navigate = useNavigate();
+  const [currentData, setCurrentData] = useState<any>([]);
+  // SETTING TABLE COLUMN
+  const columns: TableColumn<DataRow>[] = [
+    // Image
+    {
+      name: "Image",
+      cell: (row) => <img src={row.thumbnail} alt="profile picture" className="w-10 rounded-full" />,
+      maxWidth: "100px",
+    },
+    // Name
+    {
+      name: "Name",
+      sortable: true,
+      selector: (row) => row.user["first_name"] + row.user["last_name"],
+      cell: (row) => (
+        <p>
+          {row.user["first_name"]} {row.user["last_name"]}
+        </p>
+      ),
+      maxWidth: "200px",
+    },
+    // Price
+    {
+      name: "Price",
+      sortable: true,
+      selector: (row) => row.price,
+      cell: (row) => <p>${row.price}</p>,
+      maxWidth: "150px",
+    },
+    // About
+    // {
+    //   name: "About",
+    //   sortable: true,
+    //   selector: (row) => row.about,
+    // },
+    // Address
+    {
+      name: "Address",
+      sortable: true,
+      selector: (row) => row.address,
+      maxWidth: "300px",
+    },
+    // Latitude
+    {
+      name: "Latitude",
+      sortable: true,
+      selector: (row) => row.latitude,
+      maxWidth: "150px",
+    },
+    // Longitude
+    {
+      name: "Longitude",
+      sortable: true,
+      selector: (row) => row.longitude,
+      maxWidth: "150px",
+    },
+    // Category
+    {
+      name: "Category",
+      sortable: true,
+      selector: (row) => row.category,
+      maxWidth: "200px",
+    },
+    // Action
+    {
+      name: "Action",
+      cell: (row) => (
+        <div key={row.id} className="flex flex-row gap-2">
+          <button onClick={() => EditRow(row.id)} className="bg-info-100 p-2">
+            <EditPen color="#ffffff" height="1em" />
+          </button>
+          <button onClick={() => DeleteRow(row.id)} className="bg-danger-100 p-2">
+            <Delete color="#ffffff" height="1em" />
+          </button>
+        </div>
+      ),
+      maxWidth: "100px",
+    },
+  ];
 
-function Table(): JSX.Element {
-  const [pending, setPending] = useState(true);
-  const [data, setData] = useState([]);
-  // GET DATA API
-  const getProvider = async () => {
+  // Edit Function
+  const EditRow = (id: number) => {
+    navigate(`/provider/edit/${id}`);
+  };
+  // Delete Function
+  const DeleteRow = async (id: number) => {
     try {
-      const response = await axios.get("/providers");
-      setPending(false);
-      setData(response.data.data);
+      const response = await axios.delete(`/providers/delete/${id}`);
+      setCurrentData((prevData: any) => prevData.filter((row: any) => row.id !== id));
+      alert(response.data.message);
     } catch (err: any) {
-      setPending(false);
+      alert(err.message);
       console.log(err);
     }
   };
+
   useEffect(() => {
-    getProvider();
-  }, []);
+    setCurrentData(
+      data.filter(
+        (item: any) =>
+          item.user.first_name.toLowerCase().includes(query.toLocaleLowerCase()) ||
+          item.user.last_name.toLowerCase().includes(query.toLocaleLowerCase())
+      )
+    );
+  }, [data, query]);
+
   return (
     <DataTable
       columns={columns}
-      data={data}
+      data={currentData}
       sortFunction={customSort}
       progressPending={pending}
       progressComponent={<Loader />}

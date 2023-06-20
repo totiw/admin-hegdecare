@@ -6,10 +6,11 @@
 
 @layer base {
   html {
+    background-color: white;
     font-family: "Plus Jakarta Sans", sans-serif;
   }
 
   .dark {
-    background-color: rgb(28, 37, 54);
+    background-color: #1c2536;
   }
 }
