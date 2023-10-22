@@ -123,7 +123,6 @@ function Table({ data, pending, query }: { data: any; pending: boolean; query: s
       maxWidth: "100px",
     },
   ];
-
   // Edit Function
   const EditRow = (id: number) => {
     navigate(`/provider/edit/${id}`);
