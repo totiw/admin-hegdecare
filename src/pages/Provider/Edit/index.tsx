@@ -164,11 +164,9 @@ const index = () => {
                   <form onSubmit={handleSubmit} className="w-full flex flex-row justify-center">
                     <div className="flex flex-col gap-3 basis-full xl:basis-1/3">
                       <input type="file" id="file" name="thumbnail" onChange={handleFileChange} hidden />
-                      <img
-                        src={selectedImage ?? `${data.thumbnail}`}
-                        alt="profile picture"
-                        className="w-40 xl:w-32 rounded-full self-center"
-                      />
+                      <div className="w-40 h-40 xl:w-32 xl:h-32 rounded-full self-center overflow-hidden">
+                        <img src={selectedImage ?? `${data.thumbnail}`} alt="profile picture" />
+                      </div>
                       <label htmlFor="file" className="self-center border rounded-sm py-2 px-4 cursor-pointer">
                         Select Image
                       </label>

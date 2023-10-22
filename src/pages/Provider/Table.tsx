@@ -46,7 +46,11 @@ function Table({ data, pending, query }: { data: any; pending: boolean; query: s
     // Image
     {
       name: "Image",
-      cell: (row) => <img src={row.thumbnail} alt="profile picture" className="w-10 rounded-full" />,
+      cell: (row) => (
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          <img src={row.thumbnail} alt="profile picture" />
+        </div>
+      ),
       maxWidth: "100px",
     },
     // Name
